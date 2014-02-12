@@ -15,7 +15,7 @@ public class StringCheck {
 	 * @param email
 	 * @return true 符合Email false 不符合
 	 */
-	public static boolean checkEmail(String email) {
+	public static boolean isEmail(String email) {
 		if(email == null ){
 			return false;
 		}
@@ -36,10 +36,22 @@ public class StringCheck {
 	 * @param str
 	 * @return true 符合格式 false 不符合格式
 	 */
-	public static boolean checkPwd(String str){
+	public static boolean isPwd(String str){
 		if(str == null || str.length()<PASSWORD_LENGTH){
 			return false;
 		}		
+		return true;
+	}
+	
+	/**
+	 * 检查字符串空或者""
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNull(String str){
+		if(str == null || str.equals("")){
+			return false;
+		}
 		return true;
 	}
 }

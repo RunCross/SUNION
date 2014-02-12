@@ -1,5 +1,6 @@
 package com.crossrun.sunion.main.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -17,6 +18,7 @@ import com.crossrun.sunion.engine.AppEngine;
 import com.crossrun.sunion.engine.IManager;
 import com.crossrun.sunion.engine.manager.NetworkManager;
 import com.crossrun.sunion.hand.HttpResponseHand;
+import com.crossrun.sunion.mess.ActivityHandFlag;
 import com.crossrun.sunion.mess.ActivityMessage;
 import com.crossrun.sunion.util.PreferencesUtil;
 import com.crossrun.sunion.util.StringCheck;
@@ -39,10 +41,6 @@ public class LoginActivity extends BaseActivity implements Callback{
 	private LoadingDialog mDialog;
 	
 	private Handler hand;
-	
-	private static final int EMAIL_ERROR = 1;
-	private static final int PWD_ERROR = 2;
-	private static final int HTTP_ERROR = 3;
 	
 	private ResultDes loginResult;
 	
@@ -97,6 +95,7 @@ public class LoginActivity extends BaseActivity implements Callback{
 
 		// 注册
 		case R.id.login_register:
+			register();
 			break;
 			
 		case R.id.pwd_show:
@@ -116,13 +115,13 @@ public class LoginActivity extends BaseActivity implements Callback{
 	@Override
 	public boolean handleMessage(Message message) {
 		switch(message.what){
-		case EMAIL_ERROR:
+		case ActivityHandFlag.EMAIL_ERROR:
 			Toast.makeText(LoginActivity.this, ActivityMessage.EMAIL_ERROR, Toast.LENGTH_SHORT).show();
 			break;
-		case PWD_ERROR:
+		case ActivityHandFlag.PWD_ERROR:
 			Toast.makeText(LoginActivity.this, ActivityMessage.PWD_ERROR, Toast.LENGTH_SHORT).show();
 			break;
-		case HTTP_ERROR:
+		case ActivityHandFlag.HTTP_ERROR:
 			Toast.makeText(LoginActivity.this, loginResult.des, Toast.LENGTH_SHORT).show();
 			break;
 		}
@@ -137,12 +136,12 @@ public class LoginActivity extends BaseActivity implements Callback{
 		final String email = "rujiang_g@qq.com";
 		final String pwd = loginPwd.getText().toString();
 //		pwd = "123456";
-		if (!StringCheck.checkEmail(email)) {
-			hand.sendEmptyMessage(EMAIL_ERROR);
+		if (!StringCheck.isEmail(email)) {
+			hand.sendEmptyMessage(ActivityHandFlag.EMAIL_ERROR);
 			return ;
 		}
-		if(!StringCheck.checkPwd(pwd)){
-			hand.sendEmptyMessage(PWD_ERROR);
+		if(!StringCheck.isPwd(pwd)){
+			hand.sendEmptyMessage(ActivityHandFlag.PWD_ERROR);
 			return ;
 		}
 		mDialog.showDialog(ActivityMessage.Loading);
@@ -160,10 +159,17 @@ public class LoginActivity extends BaseActivity implements Callback{
 					public void onFailed(ResultDes result) {
 						mDialog.dismissDialog();
 						loginResult = result;
-						hand.sendEmptyMessage(HTTP_ERROR);
+						hand.sendEmptyMessage(ActivityHandFlag.HTTP_ERROR);
 					}
 				});
 	}
+	
+	private void register(){
+		Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+		startActivity(intent);		
+	}
+	
+	
 	private void saveUserLoginInfo(String email,String pwd){
 		PreferencesUtil.commit(PreferencesUtil.KEY_USER_EMAIL, email);
 		PreferencesUtil.commit(PreferencesUtil.KEY_USER_PWD, pwd);

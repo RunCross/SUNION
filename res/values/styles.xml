@@ -20,4 +20,15 @@
     <style name="AppThemeNoTitle" parent="AppBaseTheme">
          <item name="android:windowNoTitle">true</item>
     </style>
+    
+    <style name="input_EmailText" >
+         <item name="android:layout_width">match_parent</item>
+         <item name="android:layout_height">wrap_content</item>
+         <item name="android:layout_marginBottom">10dp</item>
+         <item name="android:digits">0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.@</item>
+         <item name="android:hint">@string/login_email</item>
+         <item name="android:inputType">textEmailAddress</item>
+         <item name="android:singleLine">true</item>
+         <item name="android:textSize">25sp</item>
+    </style>
 </resources>

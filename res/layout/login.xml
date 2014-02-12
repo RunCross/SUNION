@@ -14,14 +14,7 @@
 
         <EditText
             android:id="@+id/login_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.@"
-            android:hint="@string/login_email"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"
-            android:textSize="25sp" />
+            style="@style/input_EmailText" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,6 +28,7 @@
                 android:layout_weight="1"
                 android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_+"
                 android:hint="@string/login_pwd"
+                android:inputType="textPassword"
                 android:singleLine="true"
                 android:textSize="25sp" />
 
