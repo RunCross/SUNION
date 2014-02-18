@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -18,17 +18,38 @@
     </style>
 
     <style name="AppThemeNoTitle" parent="AppBaseTheme">
-         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
-    
-    <style name="input_EmailText" >
-         <item name="android:layout_width">match_parent</item>
-         <item name="android:layout_height">wrap_content</item>
-         <item name="android:layout_marginBottom">10dp</item>
-         <item name="android:digits">0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.@</item>
-         <item name="android:hint">@string/login_email</item>
-         <item name="android:inputType">textEmailAddress</item>
-         <item name="android:singleLine">true</item>
-         <item name="android:textSize">25sp</item>
+
+    <style name="input_EmailText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:digits">0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_.@</item>
+        <item name="android:hint">@string/login_email</item>
+        <item name="android:inputType">textEmailAddress</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">25sp</item>
     </style>
+
+    <style name="sidebar_text_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="sidebar_text_content">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">25dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>

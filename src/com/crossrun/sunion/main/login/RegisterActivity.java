@@ -1,5 +1,6 @@
 package com.crossrun.sunion.main.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -13,10 +14,16 @@ import android.widget.Toast;
 
 import com.crossrun.sunion.R;
 import com.crossrun.sunion.bean.ResultDes;
+import com.crossrun.sunion.engine.AppEngine;
+import com.crossrun.sunion.engine.IManager;
+import com.crossrun.sunion.engine.manager.NetworkManager;
+import com.crossrun.sunion.hand.HttpResponseHand;
 import com.crossrun.sunion.mess.ActivityHandFlag;
 import com.crossrun.sunion.mess.ActivityMessage;
+import com.crossrun.sunion.util.Session;
 import com.crossrun.sunion.util.StringCheck;
 import com.crossrun.sunion.view.base.BaseActivity;
+import com.crossrun.sunion.view.base.LoadingDialog;
 
 /**
  * 注册
@@ -26,7 +33,6 @@ import com.crossrun.sunion.view.base.BaseActivity;
 public class RegisterActivity extends BaseActivity implements Callback{
 
 	private EditText registerEmail;
-	private EditText pickName;
 	private EditText registerPwd;
 	private EditText registerPwdConfirm;
 	
@@ -37,6 +43,8 @@ public class RegisterActivity extends BaseActivity implements Callback{
 	
 	private ResultDes registerResult;
 	
+	private LoadingDialog mDialog;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,6 +52,7 @@ public class RegisterActivity extends BaseActivity implements Callback{
 		
 		hand = new Handler(this);
 		init();
+		mDialog = new LoadingDialog(this);
 	}
 	
 	/**
@@ -53,7 +62,6 @@ public class RegisterActivity extends BaseActivity implements Callback{
 		registerEmail = (EditText) findViewById(R.id.register_email);
 		registerPwd = (EditText) findViewById(R.id.register_pwd);
 		registerPwdConfirm = (EditText) findViewById(R.id.register_pwd_confirm);
-		pickName = (EditText) findViewById(R.id.register_pickName);
 		
 		passImg = (ImageView) findViewById(R.id.pwd_show);
 	}
@@ -86,14 +94,33 @@ public class RegisterActivity extends BaseActivity implements Callback{
 	 * 注册
 	 */
 	private void register(){
-		String email = registerEmail.getText().toString();
-		String pwd = registerPwd.getText().toString();
+		final String email = registerEmail.getText().toString();
+		final String pwd = registerPwd.getText().toString();
 		String pwdConfirm = registerPwdConfirm.getText().toString();
-		String pick = pickName.getText().toString();
-		if(!checkParam(email, pwd, pwdConfirm, pick)){
+		if(!checkParam(email, pwd, pwdConfirm)){
 		    return ;	
 		}
-		
+		mDialog.showDialog(ActivityMessage.RegisterLoading);
+		((NetworkManager) AppEngine.getInstance().getManager(
+				IManager.NETWOTK_ID)).register(email, pwd, new HttpResponseHand() {
+					
+					@Override
+					public void onSuccess(ResultDes result) {
+						mDialog.dismissDialog();
+						Intent intent = new Intent(RegisterActivity.this, LoginActivity.class); 
+						intent.putExtra(Session.USER_EMAIL, email);
+						intent.putExtra(Session.USER_PWD, pwd);
+						setResult(0, intent);
+						finish();
+					}
+					
+					@Override
+					public void onFailed(ResultDes result) {
+						mDialog.dismissDialog();
+						registerResult = result;
+						hand.sendEmptyMessage(ActivityHandFlag.HTTP_ERROR);
+					}
+				});
 		
 	}
 	
@@ -105,17 +132,14 @@ public class RegisterActivity extends BaseActivity implements Callback{
 	 * @param pick
 	 * @return true 符合格式  false 不符合格式
 	 */
-	private boolean checkParam(String email,String pwd,String pwdConfirm,String pick){
-		if(StringCheck.isEmail(email)){
+	private boolean checkParam(String email,String pwd,String pwdConfirm){
+		if(!StringCheck.isEmail(email)){
+			System.out.println(email);
 			hand.sendEmptyMessage(ActivityHandFlag.EMAIL_ERROR);
 			return false;
 		}
-		if(StringCheck.isNull(pick)){
-			hand.sendEmptyMessage(ActivityHandFlag.PICKNAME_ERROR);
-			return false;
-		}
 		
-		if(StringCheck.isPwd(pwd) || StringCheck.isPwd(pwdConfirm) ){
+		if(!StringCheck.isPwd(pwd) && !StringCheck.isPwd(pwdConfirm) ){
 			hand.sendEmptyMessage(ActivityHandFlag.PWD_ERROR);
 			return false;
 		}

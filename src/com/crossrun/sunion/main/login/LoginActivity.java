@@ -21,41 +21,43 @@ import com.crossrun.sunion.hand.HttpResponseHand;
 import com.crossrun.sunion.mess.ActivityHandFlag;
 import com.crossrun.sunion.mess.ActivityMessage;
 import com.crossrun.sunion.util.PreferencesUtil;
+import com.crossrun.sunion.util.Session;
 import com.crossrun.sunion.util.StringCheck;
 import com.crossrun.sunion.view.base.BaseActivity;
 import com.crossrun.sunion.view.base.LoadingDialog;
 
 /**
  * 登录界面
+ * 
  * @author gjyuan
- *
+ * 
  */
-public class LoginActivity extends BaseActivity implements Callback{
+public class LoginActivity extends BaseActivity implements Callback {
 
-//	private Button login;
-//	private Button forget;
-//	private Button register; 
+	// private Button login;
+	// private Button forget;
+	// private Button register;
 	private EditText loginEmail;
 	private EditText loginPwd;
 
 	private LoadingDialog mDialog;
-	
+
 	private Handler hand;
-	
+
 	private ResultDes loginResult;
-	
+
 	private boolean passShow = false;
 	private ImageView passImg;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-		
-		init();		
-		
+
+		init();
+
 		mDialog = new LoadingDialog(this);
-		
+
 		hand = new Handler(this);
 	}
 
@@ -67,15 +69,17 @@ public class LoginActivity extends BaseActivity implements Callback{
 		loginEmail = (EditText) findViewById(R.id.login_email);
 		loginPwd = (EditText) findViewById(R.id.login_pwd);
 		passImg = (ImageView) findViewById(R.id.pwd_show);
-		
-		
-		passShow = PreferencesUtil.getBoolean(PreferencesUtil.KEY_PWD_SHOW, false);
-		
-		if(passShow){
-			loginPwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+
+		passShow = PreferencesUtil.getBoolean(PreferencesUtil.KEY_PWD_SHOW,
+				false);
+
+		if (passShow) {
+			loginPwd.setTransformationMethod(HideReturnsTransformationMethod
+					.getInstance());
 			passImg.setImageResource(R.drawable.passwor_show);
-		}else{
-			loginPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
+		} else {
+			loginPwd.setTransformationMethod(PasswordTransformationMethod
+					.getInstance());
 			passImg.setImageResource(R.drawable.passwor_hidden);
 		}
 	}
@@ -84,9 +88,9 @@ public class LoginActivity extends BaseActivity implements Callback{
 		switch (view.getId()) {
 		// 登录
 		case R.id.login_go:
-			
+
 			login();
-			
+
 			break;
 
 		// 忘记密码
@@ -97,32 +101,37 @@ public class LoginActivity extends BaseActivity implements Callback{
 		case R.id.login_register:
 			register();
 			break;
-			
+
 		case R.id.pwd_show:
 			passShow = !passShow;
-			if(passShow){
-				loginPwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+			if (passShow) {
+				loginPwd.setTransformationMethod(HideReturnsTransformationMethod
+						.getInstance());
 				passImg.setImageResource(R.drawable.passwor_show);
-			}else{
-				loginPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
+			} else {
+				loginPwd.setTransformationMethod(PasswordTransformationMethod
+						.getInstance());
 				passImg.setImageResource(R.drawable.passwor_hidden);
 			}
 			loginPwd.setSelection(loginPwd.getText().length());
 			break;
 		}
 	}
-	
+
 	@Override
 	public boolean handleMessage(Message message) {
-		switch(message.what){
+		switch (message.what) {
 		case ActivityHandFlag.EMAIL_ERROR:
-			Toast.makeText(LoginActivity.this, ActivityMessage.EMAIL_ERROR, Toast.LENGTH_SHORT).show();
+			Toast.makeText(LoginActivity.this, ActivityMessage.EMAIL_ERROR,
+					Toast.LENGTH_SHORT).show();
 			break;
 		case ActivityHandFlag.PWD_ERROR:
-			Toast.makeText(LoginActivity.this, ActivityMessage.PWD_ERROR, Toast.LENGTH_SHORT).show();
+			Toast.makeText(LoginActivity.this, ActivityMessage.PWD_ERROR,
+					Toast.LENGTH_SHORT).show();
 			break;
 		case ActivityHandFlag.HTTP_ERROR:
-			Toast.makeText(LoginActivity.this, loginResult.des, Toast.LENGTH_SHORT).show();
+			Toast.makeText(LoginActivity.this, loginResult.des,
+					Toast.LENGTH_SHORT).show();
 			break;
 		}
 		return false;
@@ -131,54 +140,71 @@ public class LoginActivity extends BaseActivity implements Callback{
 	/**
 	 * 登录
 	 */
-	private void login(){
-//		final String email = loginEmail.getText().toString();
-		final String email = "rujiang_g@qq.com";
-		final String pwd = loginPwd.getText().toString();
-//		pwd = "123456";
+	private void login() {
+		// final String email = loginEmail.getText().toString();
+		String email = "rujiang_g@qq.com";
+		String pwd = loginPwd.getText().toString();
+		// pwd = "123456";
+		login(email,pwd);
+	}
+
+	private void login(final String email,final String pwd){
 		if (!StringCheck.isEmail(email)) {
 			hand.sendEmptyMessage(ActivityHandFlag.EMAIL_ERROR);
-			return ;
+			return;
 		}
-		if(!StringCheck.isPwd(pwd)){
+		if (!StringCheck.isPwd(pwd)) {
 			hand.sendEmptyMessage(ActivityHandFlag.PWD_ERROR);
-			return ;
+			return;
 		}
-		mDialog.showDialog(ActivityMessage.Loading);
+		if(mDialog == null){
+			mDialog = new LoadingDialog(this);
+		}
+		mDialog.showDialog(ActivityMessage.LoginLoading);
 		((NetworkManager) AppEngine.getInstance().getManager(
-				IManager.NETWOTK_ID)).login(email, pwd,
-				new HttpResponseHand() {
+				IManager.NETWOTK_ID)).login(email, pwd, new HttpResponseHand() {
 
-					@Override
-					public void onSuccess(ResultDes result) {
-						mDialog.dismissDialog();
-						saveUserLoginInfo(email, pwd);
-					}
+			@Override
+			public void onSuccess(ResultDes result) {
+				System.out.println("login success");
+				mDialog.dismissDialog();
+				saveUserLoginInfo(email, pwd);
+			}
 
-					@Override
-					public void onFailed(ResultDes result) {
-						mDialog.dismissDialog();
-						loginResult = result;
-						hand.sendEmptyMessage(ActivityHandFlag.HTTP_ERROR);
-					}
-				});
+			@Override
+			public void onFailed(ResultDes result) {
+				System.out.println("login failed");
+				mDialog.dismissDialog();
+				loginResult = result;
+				hand.sendEmptyMessage(ActivityHandFlag.HTTP_ERROR);
+			}
+		});
 	}
 	
-	private void register(){
+	private void register() {
 		Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-		startActivity(intent);		
+		startActivityForResult(intent, 1);
 	}
-	
-	
-	private void saveUserLoginInfo(String email,String pwd){
+
+	private void saveUserLoginInfo(String email, String pwd) {
 		PreferencesUtil.commit(PreferencesUtil.KEY_USER_EMAIL, email);
 		PreferencesUtil.commit(PreferencesUtil.KEY_USER_PWD, pwd);
 		PreferencesUtil.commit(PreferencesUtil.KEY_PWD_SHOW, passShow);
 	}
+
 	@Override
 	public byte activityId() {
 		return LOGIN_ID;
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch(requestCode){
+		case 1:
+			System.out.println("onresutl = "+data.getStringExtra(Session.USER_EMAIL)+"-"+data.getStringExtra(Session.USER_PWD));
+			login(data.getStringExtra(Session.USER_EMAIL),data.getStringExtra(Session.USER_PWD));
+			break;
+		}
+	}
 
 }

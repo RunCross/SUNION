@@ -20,13 +20,16 @@
         <activity
             android:name="com.crossrun.sunion.main.login.LoginActivity"
             android:label="@string/app_name" >
+            
+        </activity>
+        <activity android:name=".main.login.RegisterActivity" >
+        </activity>
+        <activity android:name=".main.MainViewActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".main.login.RegisterActivity" >
         </activity>
     </application>
 

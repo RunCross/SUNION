@@ -1,5 +1,6 @@
 package com.crossrun.sunion.engine.manager;
 
+import org.apache.http.client.ResponseHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,7 +42,7 @@ public class NetworkManager implements IManager {
 			
 			@Override
 			public void onSuccess(ResultDes result) {
-				System.out.println(result.des); 
+//				System.out.println(result.des); 
 				
 				try {
 					JSONObject obj = new JSONObject(result.des);
@@ -75,6 +76,48 @@ public class NetworkManager implements IManager {
 			}
 		});
 	}
+	
+	
+	public void register(final String email,final String pwd,final HttpResponseHand hand){
+		AsyncHttpClient client = new AsyncHttpClient();
+		client.sendPost(HTTP_HEAD, NetParameter.registerParameters(email, pwd), new HttpResponseHand() {
+
+			@Override
+			public void onSuccess(ResultDes result) {
+				try {
+					JSONObject obj = new JSONObject(result.des);
+					
+					int code = obj.getInt("code");
+					if(code == 0){
+						
+//						Session.put(Session.TOKEN, obj.getString("message"));
+						
+						Session.put(Session.USER_EMAIL, email);
+						
+						Session.put(Session.USER_PWD, pwd);
+						
+						hand.onSuccess(result);
+						
+					}else{
+						result.des =  obj.getString("message");
+						hand.onFailed(result);
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+					hand.onFailed(result);	
+				}
+			}
+
+			@Override
+			public void onFailed(ResultDes result) {
+				hand.onFailed(result);
+			}
+			
+		});
+	}	
+	
+	
+	
 	@Override
 	public byte managerId() {
 		// TODO Auto-generated method stub

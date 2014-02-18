@@ -15,11 +15,7 @@
         <EditText
             android:id="@+id/register_email"
             style="@style/input_EmailText" />
-
-        <EditText
-            android:id="@+id/register_pickName"
-            style="@style/input_EmailText"
-            android:hint="@string/pickName" />
+        
 
         <LinearLayout
             android:layout_width="match_parent"
