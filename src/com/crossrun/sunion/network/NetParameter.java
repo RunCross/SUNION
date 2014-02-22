@@ -6,8 +6,6 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.crossrun.sunion.util.Session;
-
 /**
  * 构造请求参数
  * @author gjyuan

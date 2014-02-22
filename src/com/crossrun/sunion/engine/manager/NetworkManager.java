@@ -1,6 +1,5 @@
 package com.crossrun.sunion.engine.manager;
 
-import org.apache.http.client.ResponseHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -120,7 +119,6 @@ public class NetworkManager implements IManager {
 	
 	@Override
 	public byte managerId() {
-		// TODO Auto-generated method stub
 		return NETWOTK_ID;
 	}
 	

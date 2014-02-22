@@ -3,10 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
- <android.support.v4.app.fragment 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/main_view"
-    /> 
-   
+    <LinearLayout
+        android:id="@+id/main_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/sidebar_text_title"
+            android:text="test" />
+    </LinearLayout>
+<ExpandableListView 
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/menu_list"
+        android:layout_marginLeft="8dp"
+        android:groupIndicator="@null"
+        >
+        </ExpandableListView>
+    <fragment
+        android:layout_toRightOf="@id/menu_list"
+        android:id="@+id/main_view"
+        android:name="android.support.v4.app.ListFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/main_title" />
+
 </RelativeLayout>

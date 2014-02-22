@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.crossrun.sunion.engine.manager.ActivityManager;
 import com.crossrun.sunion.engine.manager.NetworkManager;
+
 import android.content.Context;
 
 public class ManagerFactory
@@ -50,6 +51,11 @@ public class ManagerFactory
 		        	 break;
 		         }
 
+		         case IManager.FRAGMENT:
+		         {
+		        
+		        	 break;
+		         }
 	             default:
 	                break;
 	         }

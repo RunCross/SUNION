@@ -26,7 +26,7 @@ public interface IManager
      */
     byte CLASSIFIER_ID =3;
     
-    
+    byte FRAGMENT = 4;
     /**
      * 返回管理器ID
      * 

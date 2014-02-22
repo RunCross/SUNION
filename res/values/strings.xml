@@ -14,7 +14,9 @@
     <string name="pickName">昵称</string>
     <!-- 侧边栏 -->
     <string name="person_info">个人信息</string>
-    <string name="part_info">我加入的团体</string>
-    <string name="unions_info">团体列表</string>
+    <string name="part_info">我的组织</string>
+    <string name="unions_info">组织列表</string>
+    <string name="my_info">修改我的信息</string>
+    <string name="password_change">修改我的密码</string>
 
 </resources>

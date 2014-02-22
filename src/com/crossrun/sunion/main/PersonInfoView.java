@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 public class PersonInfoView extends Fragment {
 
+	private static final String TAG = "PersonInfo";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
